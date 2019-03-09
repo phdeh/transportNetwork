@@ -1,6 +1,6 @@
 class FlowNetwork(
-    val source: Node,
-    val sink: Node,
+    private val source: Node,
+    private val sink: Node,
     val trafficVolumeMatrix: Matrix<Node, Int>
 ) {
     val maxFlowMatrix: Matrix<Node, Int>
@@ -49,20 +49,19 @@ class FlowNetwork(
         var minS = listOf<Node>()
         var minT = listOf<Node>()
         combinations.forEach { it ->
-            val s = listOf(source) + it
-            val t = nodes - it + sink
-            var correct = true
+            val curS = listOf(source) + it
+            val curT = nodes - it + sink
             var flow = 0
-            s.forEach { s ->
-                t.forEach { t ->
+            curS.forEach { s ->
+                curT.forEach { t ->
                     if (trafficVolumeMatrix[t, s] > 0)
                         flow += trafficVolumeMatrix[t, s]
                 }
             }
             if (flow < minFlow) {
                 minFlow = flow
-                minS = s
-                minT = t
+                minS = curS
+                minT = curT
             }
         }
         minimalCutS = minS
